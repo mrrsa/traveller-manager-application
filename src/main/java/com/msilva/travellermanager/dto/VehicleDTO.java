@@ -5,7 +5,7 @@ public class VehicleDTO {
 	private String matricula;
 	private String marca;
 	private String modelo;
-	private String consumoCombinado;
+	private Float consumoCombinado;
 	
 	public VehicleDTO() {
 	}
@@ -28,10 +28,10 @@ public class VehicleDTO {
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
 	}
-	public String getConsumoCombinado() {
+	public Float getConsumoCombinado() {
 		return consumoCombinado;
 	}
-	public void setConsumoCombinado(String consumoCombinado) {
+	public void setConsumoCombinado(Float consumoCombinado) {
 		this.consumoCombinado = consumoCombinado;
 	}
 

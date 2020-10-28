@@ -5,7 +5,7 @@
 <title>Traveller Manager</title>
 </head>
 <body>
-	<form action="#" th:action="@{/travellermanager}" th:object="${formDTO}" method="post">
+	<form action="#" th:action="@{/calculate}" th:object="${formDTO}" method="post">
 		<input type="text" th:field="*{startingPoint}" id="startingPoint" class="controls" placeholder="Start Typing here...">
 		<input type="text" th:field="*{endingPoint}" id="endingPoint" class="controls" placeholder="Start Typing here...">
 			
@@ -20,7 +20,7 @@ Vehicles:<select th:field="*{vehicles}">
 			function initMap() {
 			  const map = new google.maps.Map(document.getElementById("map"), {
 			    mapTypeControl: false,
-			    center: { lat: -33.8688, lng: 151.2195 },
+			    center: { lat: 38.736946, lng: -9.142685 },
 			    zoom: 13,
 			  });
 			  new AutocompleteDirectionsHandler(map);
@@ -100,6 +100,7 @@ Vehicles:<select th:field="*{vehicles}">
 			  }
 			}
     </script>
+   
 		<div id="map" style="width: 500px; height: 500px; margin-left: auto; margin-right: auto"></div>
 			<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN7mimRKYbhcBUiWEsmnbWeWm6QAawG_M&callback&libraries=places&callback=initMap"></script>
 		</div>
@@ -109,7 +110,8 @@ Vehicles:<select th:field="*{vehicles}">
 		Long:<output type="text" th:field="*{startLocationLong}" id="startLocationLong"></output>
 		Coordenadas finais-Lat:<output type="text" th:field="*{endLocationLat}" id="endLocationLat"></output>
 		Long:<output type="text" th:field="*{endLocationLong}" id="endLocationLong"></output>
-		<input type="submit" id="search" name="search" value="Search!" />
+		Consumo<output type="text" th:field="*{consume}" id="consume"></output>
+		<div><input type="submit" id="calculate" name="calculate" value="Calculate" /></div>
 	</form>
 </body>
 </html>

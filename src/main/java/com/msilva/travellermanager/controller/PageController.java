@@ -48,14 +48,18 @@ public class PageController {
 		
 	}
 	
-	@PostMapping("/travellermanager")
+	@PostMapping("/calculate")
 	public ModelAndView search(ModelAndView modelandview,@RequestParam(value = "startingPoint", required = true) String startingPoint,
 	        @RequestParam(value = "endingPoint", required = true) String endingPoint,
 	        @RequestParam(value = "distance", required = false) String distance,
 	        @RequestParam(value = "duration", required = false) String duration,
 	        @RequestParam(value = "vehicle", required = false) VehicleDTO vehicle) {
 		//TODO: calcutate consume
-		modelandview.getModel();
+		Integer aux = Integer.parseInt(distance)/100;
+		Float aux2 =vehicle.getConsumoCombinado();
+		float result = aux * aux2;
+		modelandview.addObject("consume", result);
+		modelandview.setViewName("form.html");
 		return modelandview;
 		
 	}

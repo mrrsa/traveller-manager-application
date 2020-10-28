@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @SuppressWarnings("serial")
 @Entity
@@ -15,11 +16,14 @@ public class Vehicle implements Serializable{
 	@Id
 	private String matricula;
 	@Column
+	@NotBlank(message = "Marca is mandatory")
 	private String marca;
 	@Column
+	@NotBlank(message = "Modelo is mandatory")
 	private String modelo;
 	@Column
-	private String consumo_combinado;
+	@NotBlank(message = "Consumo is mandatory")
+	private Float consumo_combinado;
 	
 	public Vehicle() {
 		
@@ -42,10 +46,10 @@ public class Vehicle implements Serializable{
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
 	}
-	public String getConsumo_combinado() {
+	public Float getConsumo_combinado() {
 		return consumo_combinado;
 	}
-	public void setConsumo_combinado(String consumo_combinado) {
+	public void setConsumo_combinado(Float consumo_combinado) {
 		this.consumo_combinado = consumo_combinado;
 	}
 	

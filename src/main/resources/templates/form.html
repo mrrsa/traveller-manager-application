@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Traveller Manager</title>
+</head>
+<body>
+	<form action="#" th:action="@{/travellermanager}" th:object="${formDTO}" method="post">
+		<input type="text" th:field="*{startingPoint}" id="startingPoint" class="controls" placeholder="Start Typing here...">
+		<input type="text" th:field="*{endingPoint}" id="endingPoint" class="controls" placeholder="Start Typing here...">
+			
+Vehicles:<select th:field="*{vehicles}">
+			<option value="0">select operator</option>
+			<option th:each="vehicle : ${formDTO.vehicles}"
+				th:value="${vehicle.matricula}"
+				th:text="${vehicle.modelo}"/>
+		</select>
+		<div class="col-md-6">
+			<script th:inline="javascript">
+			function initMap() {
+			  const map = new google.maps.Map(document.getElementById("map"), {
+			    mapTypeControl: false,
+			    center: { lat: -33.8688, lng: 151.2195 },
+			    zoom: 13,
+			  });
+			  new AutocompleteDirectionsHandler(map);
+			}
+
+			class AutocompleteDirectionsHandler {
+			  constructor(map) {
+			    this.map = map;
+			    this.originPlaceId = "";
+			    this.destinationPlaceId = "";
+			    this.travelMode = google.maps.TravelMode.DRIVING;
+			    this.directionsService = new google.maps.DirectionsService();
+			    this.directionsRenderer = new google.maps.DirectionsRenderer();
+			    this.directionsRenderer.setMap(map);
+			    const originInput = document.getElementById("startingPoint");
+			    const destinationInput = document.getElementById("endingPoint");
+			    const modeSelector = document.getElementById("mode-selector");
+			    const originAutocomplete = new google.maps.places.Autocomplete(originInput);
+			    // Specify just the place data fields that you need.
+			    originAutocomplete.setFields(["place_id"]);
+			    const destinationAutocomplete = new google.maps.places.Autocomplete(
+			      destinationInput
+			    );
+			    // Specify just the place data fields that you need.
+			    destinationAutocomplete.setFields(["place_id"]);
+			    this.setupPlaceChangedListener(originAutocomplete, "ORIG");
+			    this.setupPlaceChangedListener(destinationAutocomplete, "DEST");
+			    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+			    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(
+			      destinationInput
+			    );
+			    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
+			  }
+			  setupPlaceChangedListener(autocomplete, mode) {
+			    autocomplete.bindTo("bounds", this.map);
+			    autocomplete.addListener("place_changed", () => {
+			      const place = autocomplete.getPlace();
+
+			      if (!place.place_id) {
+			        window.alert("Please select an option from the dropdown list.");
+			        return;
+			      }
+
+			      if (mode === "ORIG") {
+			        this.originPlaceId = place.place_id;
+			      } else {
+			        this.destinationPlaceId = place.place_id;
+			      }
+			      this.route();
+			    });
+			  }
+			  route() {
+			    if (!this.originPlaceId || !this.destinationPlaceId) {
+			      return;
+			    }
+			    const me = this;
+			    this.directionsService.route(
+			      {
+			        origin: { placeId: this.originPlaceId },
+			        destination: { placeId: this.destinationPlaceId },
+			        travelMode: this.travelMode,
+			      },
+			      (response, status) => {
+			    	  document.getElementById("distance").innerHTML = response.routes[0].legs[0].distance.text;
+			    	  document.getElementById("duration").innerHTML = response.routes[0].legs[0].duration.text;
+			    	  document.getElementById("startLocationLat").innerHTML = response.routes[0].legs[0].start_location.lat();
+			    	  document.getElementById("startLocationLong").innerHTML = response.routes[0].legs[0].start_location.lng();
+			    	  document.getElementById("endLocationLat").innerHTML = response.routes[0].legs[0].end_location.lat();
+			    	  document.getElementById("endLocationLong").innerHTML = response.routes[0].legs[0].end_location.lng();
+			        if (status === "OK") {
+			          me.directionsRenderer.setDirections(response);
+			        } else {
+			          window.alert("Directions request failed due to " + status);
+			        }
+			      }
+			    );
+			  }
+			}
+    </script>
+		<div id="map" style="width: 500px; height: 500px; margin-left: auto; margin-right: auto"></div>
+			<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN7mimRKYbhcBUiWEsmnbWeWm6QAawG_M&callback&libraries=places&callback=initMap"></script>
+		</div>
+		Distance<output type="text" th:field="*{distance}" id="distance"></output>
+		<output type="text" th:field="*{duration}" id="duration"></output>
+		Coordenadas iniciais-Lat:<output type="text" th:field="*{startLocationLat}" id="startLocationLat"></output>
+		Long:<output type="text" th:field="*{startLocationLong}" id="startLocationLong"></output>
+		Coordenadas finais-Lat:<output type="text" th:field="*{endLocationLat}" id="endLocationLat"></output>
+		Long:<output type="text" th:field="*{endLocationLong}" id="endLocationLong"></output>
+		<input type="submit" id="search" name="search" value="Search!" />
+	</form>
+</body>
+</html>

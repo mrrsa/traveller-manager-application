@@ -1,0 +1,1 @@
+web: java -Dserver.port=$PORT -Dspring.profiles.active=prod -war target/traveller-manager-0.0.1-SNAPSHOT.war
